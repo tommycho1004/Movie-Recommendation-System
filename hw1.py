@@ -39,14 +39,24 @@ def read_movie_genre(f):
 def create_genre_dict(d):
     # parameter d: dictionary that maps movie to genre
     # return: dictionary that maps genre to movies
-    # WRITE YOUR CODE BELOW
+    output = {}
+    for mtg in d.keys(): #mtg here is for movie to genre
+        movie = d[mtg]
+        if not movie in output.keys(): #if the genre is not in the dictionary yet, create a new key
+            output[movie] = []        
+        output[movie].append(mtg) 
+    return output
 
     
 # 2.2
 def calculate_average_rating(d):
     # parameter d: dictionary that maps movie to ratings
     # return: dictionary that maps movie to average rating
-    # WRITE YOUR CODE BELOW
+    output = {}
+    for key in d.keys():
+                avg = sum(d[key])/len(d[key])
+                output[key] = avg
+    return output
 
     
 # ------ TASK 3: RECOMMENDATION --------
