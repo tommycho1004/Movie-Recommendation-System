@@ -1,4 +1,4 @@
-#Tommy Cho, Jennifer Xin
+#Tommy Cho, Jennifer Xin 
 
 import math
 from collections import defaultdict
