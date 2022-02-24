@@ -4,6 +4,7 @@ import sys
 import math
 from collections import defaultdict
 from collections import Counter
+from tempfile import tempdir
 
 # ------ TASK 1: READING DATA  --------
 
@@ -133,7 +134,7 @@ def genre_popularity(genre_to_movies, movie_to_average_rating, n=5):
     return output
 
 # ------ TASK 4: USER FOCUSED  --------
-
+# -- IMPORTANT: USER ID IS HANDLED AS A STRING --
 # 4.1
 def read_user_ratings(f):
     # parameter f: movie ratings file name (e.g. "movieRatingSample.txt")
@@ -149,13 +150,34 @@ def read_user_ratings(f):
     return output
     
 # 4.2
+#returns the top genre that the user likes based on the user's ratings. 
+# Here, the top genre for the user will be determined by taking the average rating of the 
+# movies genre-wise that the user has rated. If multiple genres have the same highest ratings 
+# for the user, return any one of genres (arbitrarily) as the top genre.
 def get_user_genre(user_id, user_to_movies, movie_to_genre):
-    # parameter user_id: user id
+    # parameter user_id: user id as a string
     # parameter user_to_movies: dictionary that maps user to movies and ratings
     # parameter movie_to_genre: dictionary that maps movie to genre
     # return: top genre that user likes
-    # WRITE YOUR CODE BELOW
-    return
+    user_movieList = user_to_movies[user_id]
+    genre_rating = {}
+    mutableList = [] 
+    for rating in user_movieList: #since tuples are immutable, we can convert the tuples of movie and rating into a mutable list
+        x = list(rating)
+        mutableList.append(x)
+    for i in range(len(mutableList)): #convert movie and rating list into genre and rating dictionary
+        mutableList[i][0] = movie_to_genre[user_movieList[i][0]]
+        key, value = mutableList[i][0], float(mutableList[i][1]) #create a dictionary of genre rating pairs
+        if key not in genre_rating:
+            genre_rating[key] = []
+        genre_rating[key].append(value)
+    for item in genre_rating: #convert values of genre_rating dictionary into the average of each genre
+        rlist = genre_rating.get(item)
+        genre_rating[item] = sum(rlist)/len(rlist)
+    #sort new dictionary by average rating of genre
+    sorted_genre_rating = {key: value for key, value in sorted(genre_rating.items(), key=lambda x: x[1], reverse= True)}
+
+    return list(sorted_genre_rating.keys())[0]
     
 # 4.3    
 def recommend_movies(user_id, user_to_movies, movie_to_genre, movie_to_average_rating):
@@ -166,6 +188,14 @@ def recommend_movies(user_id, user_to_movies, movie_to_genre, movie_to_average_r
     # return: dictionary that maps movie to average rating
     # WRITE YOUR CODE BELOW
     return
+
+
+
+
+
+
+
+
 
 # -------- main function for your testing -----
 def main(argv):
