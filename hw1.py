@@ -55,8 +55,8 @@ def calculate_average_rating(d):
     # return: dictionary that maps movie to average rating
     output = {}
     for key in d.keys():
-                avg = sum(d[key])/len(d[key])
-                output[key] = avg
+        avg = sum(d[key])/len(d[key])
+        output[key] = avg
     return output
 
     
@@ -81,7 +81,14 @@ def filter_movies(d, thres_rating=3):
     # parameter thres_rating: threshold rating, default value 3
     # return: dictionary that maps movie to average rating
     # WRITE YOUR CODE BELOW
-    return
+    dlist = d.items()
+    output_list = []
+    for ele in dlist:
+        x,y = ele
+        if y >= thres_rating:
+            output_list.append(ele)
+    output = dict(output_list)
+    return output
     
 # 3.3
 def get_popular_in_genre(genre, genre_to_movies, movie_to_average_rating, n=5):
@@ -91,7 +98,16 @@ def get_popular_in_genre(genre, genre_to_movies, movie_to_average_rating, n=5):
     # parameter n: integer (for top n), default value 5
     # return: dictionary that maps movie to average rating
     # WRITE YOUR CODE BELOW
-    return
+    movies = genre_to_movies[genre]
+    tmp = {}
+    for ele in movie_to_average_rating.items():
+        x,y = ele
+        if x in movies:
+            for ele2 in movies:
+                if x == ele2:
+                    tmp[x] = y
+
+    return get_popular_movies(tmp,n)
     
 # 3.4
 def get_genre_rating(genre, genre_to_movies, movie_to_average_rating):
@@ -100,7 +116,13 @@ def get_genre_rating(genre, genre_to_movies, movie_to_average_rating):
     # parameter movie_to_average_rating: dictionary  that maps movie to average rating
     # return: average rating of movies in genre
     # WRITE YOUR CODE BELOW
-    return
+    output = 0
+    movies = genre_to_movies[genre] # all movies in genre
+    sum = 0
+    for movie in movies:
+        sum += movie_to_average_rating[movie]
+    output = sum / len(movies)
+    return output
     
 # 3.5
 def genre_popularity(genre_to_movies, movie_to_average_rating, n=5):
@@ -109,7 +131,11 @@ def genre_popularity(genre_to_movies, movie_to_average_rating, n=5):
     # parameter n: integer (for top n), default value 5
     # return: dictionary that maps genre to average rating
     # WRITE YOUR CODE BELOW
-    return
+    tmp = {}
+    for key in genre_to_movies.keys():
+        tmp[key] = get_genre_rating(key, genre_to_movies, movie_to_average_rating)
+    output = get_popular_movies(tmp,n)
+    return output
 
 # ------ TASK 4: USER FOCUSED  --------
 
@@ -160,6 +186,18 @@ def main(argv):
     print("\n #3.1 get_popular_movies() => top n movies \n")
     top_movies = get_popular_movies(movie_avg, 2)
     print(top_movies)
+    print("\n #3.2 filter_movies() => movies at or above threshold rating \n")
+    fil_movies = filter_movies(movie_avg,4)
+    print(fil_movies)
+    print("\n #3.3 get_popular_in_genre() => top n movies in x genre \n")
+    top_movies_in_genre = get_popular_in_genre("Action", gen_movie, movie_avg, 10)
+    print(top_movies_in_genre)
+    print("\n #3.4 get_genre_rating() => avg rating of genre \n")
+    gen_rat = get_genre_rating("Adventure", gen_movie, movie_avg)
+    print(gen_rat)
+    print("\n #3.5 genre_popularity() => top n genres \n")
+    top_gen = genre_popularity(gen_movie, movie_avg,2)
+    print(top_gen)
     return
     
 # DO NOT write ANY CODE (including variable names) outside of any of the above functions
