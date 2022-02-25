@@ -159,6 +159,8 @@ def get_user_genre(user_id, user_to_movies, movie_to_genre):
     # parameter user_to_movies: dictionary that maps user to movies and ratings
     # parameter movie_to_genre: dictionary that maps movie to genre
     # return: top genre that user likes
+    if type(user_id) == int:
+        user_id = str(user_id)
     user_movieList = user_to_movies[user_id]
     genre_rating = {}
     mutableList = [] 
@@ -186,8 +188,20 @@ def recommend_movies(user_id, user_to_movies, movie_to_genre, movie_to_average_r
     # parameter movie_to_genre: dictionary that maps movie to genre
     # parameter movie_to_average_rating: dictionary that maps movie to average rating
     # return: dictionary that maps movie to average rating
+    if type(user_id) == int:
+        user_id = str(user_id)
+    gen_movie = create_genre_dict(movie_to_genre)
+    fav_genre = get_user_genre(user_id,user_to_movies,movie_to_genre) # user's fav genre
+    user_movs = [x for x,y in user_to_movies[user_id]] # all of user's reviewed movies
+    num_mov = len(gen_movie[fav_genre]) # num movies in genre
+    pop_gen = get_popular_in_genre(fav_genre,gen_movie,movie_to_average_rating, num_mov)
+    output = {}
+    for x in range(0,3):
+        for key in pop_gen.keys():
+            if key not in user_movs:
+                output[key] = movie_to_average_rating[key]
     # WRITE YOUR CODE BELOW
-    return
+    return output
 
 
 
@@ -230,6 +244,15 @@ def main(argv):
     print("\n #3.5 genre_popularity() => top n genres \n")
     top_gen = genre_popularity(gen_movie, movie_avg,2)
     print(top_gen)
+    print("\n #4.1 read_user_ratings() => user to movies dict \n")
+    user_movies = read_user_ratings(m_ratings)
+    print(user_movies)
+    print("\n #4.2 get_user_genre() => user's top genre \n")
+    user_top_gen = get_user_genre(1,user_movies,movie_gen)
+    print(user_top_gen)
+    print("\n #4.3 recommend_movies() => recommend 3 top movies in genre \n")
+    user_recs = recommend_movies(1, user_movies, movie_gen, movie_avg)
+    print(user_recs)
     return
     
 # DO NOT write ANY CODE (including variable names) outside of any of the above functions
