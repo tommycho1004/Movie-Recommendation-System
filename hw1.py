@@ -159,9 +159,10 @@ def get_user_genre(user_id, user_to_movies, movie_to_genre):
     # parameter user_to_movies: dictionary that maps user to movies and ratings
     # parameter movie_to_genre: dictionary that maps movie to genre
     # return: top genre that user likes
-    if type(user_id) == int:
-        user_id = str(user_id)
-    user_movieList = user_to_movies[user_id]
+    if user_id not in user_to_movies:
+        return 'Invalid User ID'
+    else:
+        user_movieList = user_to_movies[user_id]
     genre_rating = {}
     mutableList = [] 
     for rating in user_movieList: #since tuples are immutable, we can convert the tuples of movie and rating into a mutable list
@@ -176,9 +177,8 @@ def get_user_genre(user_id, user_to_movies, movie_to_genre):
     for item in genre_rating: #convert values of genre_rating dictionary into the average of each genre
         rlist = genre_rating.get(item)
         genre_rating[item] = sum(rlist)/len(rlist)
-    #sort new dictionary by average rating of genre
     sorted_genre_rating = {key: value for key, value in sorted(genre_rating.items(), key=lambda x: x[1], reverse= True)}
-
+    
     return list(sorted_genre_rating.keys())[0]
     
 # 4.3    
