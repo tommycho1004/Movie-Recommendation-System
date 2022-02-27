@@ -192,6 +192,8 @@ def recommend_movies(user_id, user_to_movies, movie_to_genre, movie_to_average_r
     # return: dictionary that maps movie to average rating
     if type(user_id) == int:
         user_id = str(user_id)
+    if user_id not in user_to_movies:
+        return 'Invalid User ID'
     gen_movie = create_genre_dict(movie_to_genre)
     fav_genre = get_user_genre(user_id,user_to_movies,movie_to_genre) # user's fav genre
     user_movs = [x for x,y in user_to_movies[user_id]] # all of user's reviewed movies
