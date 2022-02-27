@@ -159,6 +159,8 @@ def get_user_genre(user_id, user_to_movies, movie_to_genre):
     # parameter user_to_movies: dictionary that maps user to movies and ratings
     # parameter movie_to_genre: dictionary that maps movie to genre
     # return: top genre that user likes
+    if type(user_id) == int:
+        user_id = str(user_id)
     if user_id not in user_to_movies:
         return 'Invalid User ID'
     else:
@@ -200,7 +202,7 @@ def recommend_movies(user_id, user_to_movies, movie_to_genre, movie_to_average_r
         for key in pop_gen.keys():
             if key not in user_movs:
                 output[key] = movie_to_average_rating[key]
-    # WRITE YOUR CODE BELOW
+    
     return output
 
 
